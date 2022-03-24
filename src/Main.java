@@ -1,20 +1,12 @@
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        ThreadGroup threadGroup = new ThreadGroup("myThreadGroup");
-        for (int i = 0; i < 4; i++) {
-            new MyThread(threadGroup,"Поток " + i).start();
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-        }
-        Thread.sleep(5000);
-        threadGroup.interrupt();
-
-    }
-}
-
-/*
+        /*
     Создание потоков и добавление их в коллекцию.
     Работа с коллекциями потоков
 
@@ -32,3 +24,33 @@ public class Main {
         thread.interrupt();
         }
         */
+
+/*        ThreadGroup threadGroup = new ThreadGroup("myThreadGroup");
+        for (int i = 0; i < 4; i++) {
+            new MyThread(threadGroup,"Поток " + (i+1)).start();
+
+        }
+        Thread.sleep(5000);
+        threadGroup.interrupt();
+        System.out.println("Все потоки завершены");
+        */
+
+        ExecutorService es = Executors.newFixedThreadPool(4);
+        List<MyCallable> tasks = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            tasks.add(new MyCallable());
+        }
+
+        List<Future<String>> futures = es.invokeAll(tasks);
+
+        for (Future<String> future : futures) {
+            System.out.println(future.get());
+        }
+
+        String s = es.invokeAny(tasks);
+        System.out.println(s);
+
+        es.shutdown();
+    }
+}
+
