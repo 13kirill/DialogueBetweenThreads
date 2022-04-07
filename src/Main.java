@@ -41,14 +41,14 @@ public class Main {
             tasks.add(new MyCallable());
         }
 
-        List<Future<String>> futures = es.invokeAll(tasks);
+        List<Future<Integer>> futures = es.invokeAll(tasks);
 
-        for (Future<String> future : futures) {
+        for (Future<Integer> future : futures) {
             System.out.println(future.get());
         }
 
-        String s = es.invokeAny(tasks);
-        System.out.println(s);
+        Integer i = es.invokeAny(tasks);
+        System.out.println(i);
 
         es.shutdown();
     }
