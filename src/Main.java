@@ -47,8 +47,8 @@ public class Main {
             System.out.println(future.get());
         }
 
-        String s = es.invokeAny(tasks);
-        System.out.println(s);
+        String s =  es.invokeAny(tasks);
+        System.out.println("Первым завершился поток: " + s);
 
         es.shutdown();
     }
